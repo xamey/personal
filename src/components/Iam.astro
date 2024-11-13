@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets"
+---
+<div class="m-[64px] text-center flex flex-col md:flex-row items-center justify-evenly gap-8">
+    <div class="flex flex-col items-center justify-center"> 
+        <span class="text-4xl text-green-400">
+            <span class="text-white">Hello! I'm</span> 
+            <span class="halo">Xamey.</span>
+        </span>
+        <span class="text-xl text-gray-400">Senior Software Engineer</span>
+        <span class="text-xl text-white">I love to resolve problems using code.</span>
+    </div>
+    <Image src="/xameyz.png" alt="Xameyz" width="256" height="256" />
+</div>
+
+<style>
+    .halo {
+      position: relative;
+      display: inline-block;
+    }
+  
+    .halo::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 2px solid green;
+      border-radius: 50%;
+      animation: rotate 3s linear infinite;
+      z-index: -1;
+    }
+  
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+</style>

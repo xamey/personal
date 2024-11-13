@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TechStack from '../components/TechStack';
+import Books from '../components/Books';
+import GithubActivity from '../components/GithubActivity';
+import Iam from '../components/Iam.astro';
+import Bar from '../components/Bar.astro';
+---
+
+<Layout title="Developer Portfolio">
+  <Bar />
+  <main class="min-h-screen text-white py-24">
+    <div class="mx-auto px-4">
+      <Iam />
+      <div class="space-y-24 flex flex-col gap-8 m-8">
+        <TechStack />
+        <GithubActivity client:load/>
+        <Books />
+      </div>
+    </div>
+  </main>
+</Layout>
