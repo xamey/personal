@@ -5,17 +5,20 @@ import Books from '../components/Books';
 import GithubActivity from '../components/GithubActivity';
 import Iam from '../components/Iam.astro';
 import Bar from '../components/Bar.astro';
+import Separator from '../components/Separator.astro';
 ---
 
 <Layout title="Xamey's Personal Website">
   <Bar />
-  <main class="min-h-screen text-white py-24">
+  <main class="min-h-screen text-white">
     <div class="mx-auto px-4">
       <Iam />
-      <div class="space-y-24 flex flex-col gap-8 m-8">
-        <TechStack />
+      <div class="flex flex-col gap-8 m-8">
         <GithubActivity client:load/>
+        <Separator />
         <Books />
+        <Separator />
+        <TechStack />
       </div>
     </div>
   </main>

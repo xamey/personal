@@ -10,17 +10,20 @@ interface Repository {
 }
 
 interface Contribution {
-  repo: string;
-  type: string;
-  title: string;
   url: string;
+  repo_name: string;
+  title: string;
+  state: string;
 }
 
 export default function GithubActivity() {
+  const chunks = 5;
   const [repos, setRepos] = useState<Repository[]>([]);
   const [contributions, setContributions] = useState<Contribution[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [reposToShow, setReposToShow] = useState(chunks);
+  const [contributionsToShow, setContributionsToShow] = useState(chunks);
 
   useEffect(() => {
     const fetchGithubData = async () => {
@@ -33,54 +36,34 @@ export default function GithubActivity() {
 
         // Filter out forks and get the most relevant repos
         const significantRepos = reposData
-          .filter((repo: Repository) => !repo.fork)
+          .filter((repo: Repository) => !repo.fork && repo.description)
           .sort(
             (a: Repository, b: Repository) =>
               b.stargazers_count - a.stargazers_count
-          )
-          .slice(0, 3);
+          );
 
         setRepos(significantRepos);
 
         // Fetch user's recent activity
         const eventsResponse = await fetch(
-          "https://api.github.com/users/xamey/events/public"
+          "https://api.github.com/search/issues?q=type:pr+author:xamey&per_page=100"
         );
         const eventsData = await eventsResponse.json();
 
+        const prs = eventsData.items;
         // Process events into contributions, filtering for external repos only
-        const recentContributions = eventsData
-          .filter((event: any) => {
-            // Check if the event is a contribution type we're interested in
-            const isValidType = [
-              "PushEvent",
-              "PullRequestEvent",
-              "IssuesEvent",
-            ].includes(event.type);
-            // Check if the repo is not owned by the user
-            const isExternalRepo = !event.repo.name.startsWith("xamey/");
-            return isValidType && isExternalRepo;
-          })
-          .slice(0, 3)
-          .map((event: any) => ({
-            repo: event.repo.name,
-            type:
-              event.type === "PushEvent"
-                ? "Commit"
-                : event.type === "PullRequestEvent"
-                ? "PR"
-                : "Issue",
-            title:
-              event.type === "PushEvent"
-                ? event.payload.commits?.[0]?.message
-                : event.payload.pull_request?.title ||
-                  event.payload.issue?.title,
-            url:
-              event.type === "PushEvent"
-                ? `https://github.com/${event.repo.name}/commit/${event.payload.commits?.[0]?.sha}`
-                : event.payload.pull_request?.html_url ||
-                  event.payload.issue?.html_url,
-          }));
+        const recentContributions = prs
+          .filter((pr) => !pr.repository_url.includes("/xamey/"))
+          .map((pr: any) => {
+            const repoParts = pr.repository_url.split("/");
+            const repoName = `${repoParts[4]}/${repoParts[5]}`;
+            return {
+              url: pr.html_url,
+              repo_name: repoName,
+              title: pr.title,
+              state: pr.state,
+            };
+          });
 
         setContributions(recentContributions);
         setLoading(false);
@@ -123,13 +106,13 @@ export default function GithubActivity() {
       </div>
 
       <div className="space-y-8">
-        {/* {repos.length > 0 && (
+        {repos.length > 0 && (
           <div className="space-y-4">
             <h3 className="text-sm font-medium text-violet-400 uppercase tracking-wider">
               Top Repositories
             </h3>
             <div className="grid gap-4">
-              {repos.map((repo) => (
+              {repos.slice(0, reposToShow).map((repo) => (
                 <a
                   href={repo.html_url}
                   target="_blank"
@@ -147,13 +130,23 @@ export default function GithubActivity() {
                     </span>
                   </div>
                   {repo.description && (
-                    <p className="text-gray-400 text-sm mt-2">{repo.description}</p>
+                    <p className="text-gray-400 text-sm mt-2">
+                      {repo.description}
+                    </p>
                   )}
                 </a>
               ))}
             </div>
+            {reposToShow < repos.length && (
+              <button
+                onClick={() => setReposToShow(reposToShow + chunks)}
+                className="text-violet-400 hover:underline"
+              >
+                View More
+              </button>
+            )}
           </div>
-        )} */}
+        )}
 
         {contributions.length > 0 && (
           <div className="space-y-4">
@@ -161,7 +154,7 @@ export default function GithubActivity() {
               External Contributions
             </h3>
             <div className="grid gap-4">
-              {contributions.map((contrib) => (
+              {contributions.slice(0, contributionsToShow).map((contrib) => (
                 <a
                   href={contrib.url}
                   target="_blank"
@@ -172,16 +165,32 @@ export default function GithubActivity() {
                 >
                   <div className="flex items-start justify-between">
                     <h4 className="font-semibold group-hover:text-violet-400 transition-colors">
-                      {contrib.repo}
+                      {contrib.repo_name}
                     </h4>
-                    <span className="text-xs bg-violet-500/10 text-violet-400 px-2 py-1 rounded-full">
-                      {contrib.type}
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full ${
+                        contrib.state === "open"
+                          ? "bg-green-500/10 text-green-400"
+                          : "bg-violet-500/10 text-violet-400"
+                      }`}
+                    >
+                      {contrib.state}
                     </span>
                   </div>
                   <p className="text-gray-400 text-sm mt-2">{contrib.title}</p>
                 </a>
               ))}
             </div>
+            {contributionsToShow < contributions.length && (
+              <button
+                onClick={() =>
+                  setContributionsToShow(contributionsToShow + chunks)
+                }
+                className="text-violet-400 hover:underline"
+              >
+                View More
+              </button>
+            )}
           </div>
         )}
 
