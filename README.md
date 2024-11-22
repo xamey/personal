@@ -1,4 +1,4 @@
-# Xamey's Personal Website
+# Xamey
 
 This is my personal website built with Astro with React.
 
