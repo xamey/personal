@@ -1,0 +1,9 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Bar from "../components/Bar.astro";
+import Blogpost from "../components/Blogpost";
+---
+<Layout title="Xamey">
+  <Bar showBack />
+  <Blogpost client:only />
+</Layout>

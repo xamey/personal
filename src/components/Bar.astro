@@ -1,7 +1,10 @@
 ---
 import SocialButton from "./SocialButton.astro"
+const { showBack } = Astro.props;
+const { sticky } = Astro.props;
 ---
-<span class="flex justify-end sticky top-[20px] z-[1] p-8">
+<span class={`flex ${showBack ? 'justify-between' : 'justify-end'} ${sticky ? 'sticky top-[20px] z-[1]' : ''} p-8`}>
+    {showBack && <a href="/" class="text-white border-b border-white text-lg font-semibold">Go back home</a>}
     <span class="flex gap-4 items-center">
         <SocialButton href="https://bsky.app/profile/xameyz.bsky.social" icon="/socials/bluesky.png" />
         <SocialButton href="https://github.com/xamey" icon="/socials/github.png" />

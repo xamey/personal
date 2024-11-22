@@ -4,11 +4,12 @@ export default function Line(props: {
   title: string;
   subtitle?: string;
   description?: string;
+  thisWindow?: boolean;
 }) {
   return (
     <a
       href={props.href}
-      target="_blank"
+      target={props.thisWindow ? "_self" : "_blank"}
       rel="noopener noreferrer"
       key={props.key}
       className="p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 
