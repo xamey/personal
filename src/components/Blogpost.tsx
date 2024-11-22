@@ -44,6 +44,9 @@ export default function Blogpost() {
             <ol className="list-decimal ml-4 mb-4" {...props} />
           ),
           li: ({ node, ...props }) => <li className="ml-4" {...props} />,
+          a: ({ node, ...props }) => (
+            <a className="text-violet-500" {...props} />
+          ),
         }}
       >
         {content}
