@@ -1,4 +1,5 @@
 import React from "react";
+import Line from "./Line";
 
 const books = [
   {
@@ -35,27 +36,13 @@ export default function Books() {
       </div>
       <div className="grid gap-4">
         {books.map((book) => (
-          <a
+          <Line
             href={book.url}
-            target="_blank"
-            rel="noopener noreferrer"
             key={book.url}
-            className="p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 
-            transition-colors duration-200 group"
-          >
-            <div
-              key={book.title}
-              className="p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 
-              transition-colors duration-200"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="font-semibold">{book.title}</h3>
-                  <p className="text-gray-400 text-sm mt-1">by {book.author}</p>
-                </div>
-              </div>
-            </div>
-          </a>
+            title={book.title}
+            subtitle={book.author}
+            description={book.url}
+          />
         ))}
       </div>
     </section>

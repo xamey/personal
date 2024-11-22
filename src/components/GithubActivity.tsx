@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Line from "./Line";
 
 interface Repository {
   name: string;
@@ -109,32 +110,17 @@ export default function GithubActivity() {
         {repos.length > 0 && (
           <div className="space-y-4">
             <h3 className="text-sm font-medium text-violet-400 uppercase tracking-wider">
-              Top Repositories
+              Repositories
             </h3>
             <div className="grid gap-4">
               {repos.slice(0, reposToShow).map((repo) => (
-                <a
+                <Line
                   href={repo.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   key={repo.full_name}
-                  className="p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 
-                    transition-colors duration-200 group"
-                >
-                  <div className="flex items-start justify-between">
-                    <h4 className="font-semibold group-hover:text-violet-400 transition-colors">
-                      {repo.name}
-                    </h4>
-                    <span className="text-xs bg-white/5 px-2 py-1 rounded-full">
-                      ★ {repo.stargazers_count}
-                    </span>
-                  </div>
-                  {repo.description && (
-                    <p className="text-gray-400 text-sm mt-2">
-                      {repo.description}
-                    </p>
-                  )}
-                </a>
+                  title={repo.name}
+                  subtitle={`★ ${repo.stargazers_count}`}
+                  description={repo.description}
+                />
               ))}
             </div>
             {reposToShow < repos.length && (
@@ -155,30 +141,13 @@ export default function GithubActivity() {
             </h3>
             <div className="grid gap-4">
               {contributions.slice(0, contributionsToShow).map((contrib) => (
-                <a
+                <Line
                   href={contrib.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   key={contrib.url}
-                  className="p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 
-                    transition-colors duration-200 group"
-                >
-                  <div className="flex items-start justify-between">
-                    <h4 className="font-semibold group-hover:text-violet-400 transition-colors">
-                      {contrib.repo_name}
-                    </h4>
-                    <span
-                      className={`text-xs px-2 py-1 rounded-full ${
-                        contrib.state === "open"
-                          ? "bg-green-500/10 text-green-400"
-                          : "bg-violet-500/10 text-violet-400"
-                      }`}
-                    >
-                      {contrib.state}
-                    </span>
-                  </div>
-                  <p className="text-gray-400 text-sm mt-2">{contrib.title}</p>
-                </a>
+                  title={contrib.repo_name}
+                  subtitle={contrib.state}
+                  description={contrib.title}
+                />
               ))}
             </div>
             {contributionsToShow < contributions.length && (
