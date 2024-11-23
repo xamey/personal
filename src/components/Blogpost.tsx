@@ -14,7 +14,7 @@ export default function Blogpost() {
   }, []);
 
   return (
-    <div className="text-white mx-auto p-12 space-y-8">
+    <div className="text-white mx-auto p-12 space-y-8 prose">
       <h4 className="text-violet-500 text-4xl font-semibold">{title}</h4>
       <span className="text-xs bg-white/5 px-2 py-1 rounded-full"></span>
       <ReactMarkdown
