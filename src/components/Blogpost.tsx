@@ -23,7 +23,7 @@ export default function Blogpost() {
             <h1 className="text-3xl mb-4" {...props} />
           ),
           h2: ({ node, ...props }) => (
-            <h2 className="text-2xl mb-4" {...props} />
+            <h2 className="text-2xl mb-4 text-purple-300" {...props} />
           ),
           h3: ({ node, ...props }) => (
             <h3 className="text-xl mb-4" {...props} />
