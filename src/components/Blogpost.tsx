@@ -47,6 +47,12 @@ export default function Blogpost() {
           a: ({ node, ...props }) => (
             <a className="text-violet-500" {...props} />
           ),
+          code: ({ node, ...props }) => (
+            <code
+              className="bg-white/5 p-1 rounded-md text-red-300"
+              {...props}
+            />
+          ),
         }}
       >
         {content}
