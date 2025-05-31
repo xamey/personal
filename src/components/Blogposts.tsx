@@ -18,7 +18,7 @@ export default function Blogposts() {
           sha: item.sha,
         }));
 
-        setPosts(parsedPosts);
+        setPosts(parsedPosts.reverse());
       })
       .catch((error) => console.error("Error fetching posts:", error));
   }, []);
